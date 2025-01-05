@@ -4,7 +4,7 @@ function Forms() {
   const [rows, setRows] = useState([
     {
       id: 1,
-      formCode: generateFormCode("Sanding"),
+      formCode: generateFormCode("Chipper"),
       section: "chipper",
       machineName: "Data 3",
       shift: "Data 4",
