@@ -1,20 +1,32 @@
 import React from "react";
+import ReactApexChart from "react-apexcharts";
+import { ChartsHeader } from "../../components/";
+import { useStateContext } from "../../contexts/ContextProvider";
+import { pieChartData } from "../../data/dummy"; // Importing the data
 
-import { pieChartData } from "../../data/dummy";
-import { ChartsHeader, Pie as PieChart } from "../../components/";
+function Pie() {
+  const { currentMode } = useStateContext();
 
-const Pie = () => (
-  <div className="m-4 md:m-10 mt-24 p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl">
-    <ChartsHeader category="Pie" title="Project Cost Breakdown" />
-    <div className="w-full">
-      <PieChart
-        id="chart-pie"
-        data={pieChartData}
-        legendVisiblity
-        height="full"
-      />
+  return (
+    <div className="m-4 md:m-10 mt-24 p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl">
+      <ChartsHeader category="Pie" title="Forms Numbers in Month" />
+      <div id="chart" className="w-full">
+        <ReactApexChart
+          options={{
+            chart: {
+              id: "basic-pie",
+            },
+            background: currentMode === "Dark" ? "#33373E" : "#fff",
+            labels: pieChartData.map((item) => item.x), // Adding labels for the pie chart
+          }}
+          series={pieChartData.map((item) => item.y)} // Using the imported data
+          type="pie"
+          height={350}
+        />
+      </div>
+      <div id="html-dist" className="w-full"></div>
     </div>
-  </div>
-);
+  );
+}
 
 export default Pie;
