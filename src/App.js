@@ -26,7 +26,6 @@ import {
   Start,
   TechnicianLogin,
   OperatorLogin,
-  PersonelDashboard,
   SubmitForm,
 } from "./pages";
 
