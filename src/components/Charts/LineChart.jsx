@@ -1,44 +1,37 @@
 import React from "react";
-import {
-  ChartComponent,
-  SeriesCollectionDirective,
-  SeriesDirective,
-  Inject,
-  LineSeries,
-  DateTime,
-  Legend,
-  Tooltip,
-} from "@syncfusion/ej2-react-charts";
-
+import ReactApexChart from "react-apexcharts";
+import { useStateContext } from "../../contexts/ContextProvider";
 import {
   lineCustomSeries,
   LinePrimaryXAxis,
   LinePrimaryYAxis,
 } from "../../data/dummy";
-import { useStateContext } from "../../contexts/ContextProvider";
 
 const LineChart = () => {
   const { currentMode } = useStateContext();
 
   return (
-    <ChartComponent
-      id="line-chart"
-      height="420px"
-      primaryXAxis={LinePrimaryXAxis}
-      primaryYAxis={LinePrimaryYAxis}
-      chartArea={{ border: { width: 0 } }}
-      tooltip={{ enable: true }}
-      background={currentMode === "Dark" ? "#33373E" : "#fff"}
-      legendSettings={{ background: "white" }}
-    >
-      <Inject services={[LineSeries, DateTime, Legend, Tooltip]} />
-      <SeriesCollectionDirective>
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        {lineCustomSeries.map((item, index) => (
-          <SeriesDirective key={index} {...item} />
-        ))}
-      </SeriesCollectionDirective>
-    </ChartComponent>
+    <div className="m-4 md:m-10 mt-24 p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl">
+      <div id="chart" className="w-full">
+        <ReactApexChart
+          options={{
+            chart: {
+              id: "basic-line",
+            },
+            xaxis: LinePrimaryXAxis,
+            yaxis: LinePrimaryYAxis,
+            background: currentMode === "Dark" ? "#33373E" : "#fff",
+          }}
+          series={lineCustomSeries.map((series) => ({
+            name: series.name,
+            data: series.dataSource.map((item) => item.y),
+          }))}
+          type="line"
+          height={350}
+        />
+      </div>
+      <div id="html-dist" className="w-full"></div>
+    </div>
   );
 };
 

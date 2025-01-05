@@ -1453,32 +1453,19 @@ export const scheduleData = [
 
 export const lineChartData = [
   [
-    { x: new Date(2005, 0, 1), y: 21 },
-    { x: new Date(2006, 0, 1), y: 24 },
-    { x: new Date(2007, 0, 1), y: 36 },
-    { x: new Date(2008, 0, 1), y: 38 },
-    { x: new Date(2009, 0, 1), y: 54 },
-    { x: new Date(2010, 0, 1), y: 57 },
-    { x: new Date(2011, 0, 1), y: 70 },
+    { x: "Jan", y: 30 },
+    { x: "Feb", y: 20 },
+    { x: "Mar", y: 35 },
   ],
   [
-    { x: new Date(2005, 0, 1), y: 28 },
-    { x: new Date(2006, 0, 1), y: 44 },
-    { x: new Date(2007, 0, 1), y: 48 },
-    { x: new Date(2008, 0, 1), y: 50 },
-    { x: new Date(2009, 0, 1), y: 66 },
-    { x: new Date(2010, 0, 1), y: 78 },
-    { x: new Date(2011, 0, 1), y: 84 },
+    { x: "Jan", y: 20 },
+    { x: "Feb", y: 30 },
+    { x: "Mar", y: 25 },
   ],
-
   [
-    { x: new Date(2005, 0, 1), y: 10 },
-    { x: new Date(2006, 0, 1), y: 20 },
-    { x: new Date(2007, 0, 1), y: 30 },
-    { x: new Date(2008, 0, 1), y: 39 },
-    { x: new Date(2009, 0, 1), y: 50 },
-    { x: new Date(2010, 0, 1), y: 70 },
-    { x: new Date(2011, 0, 1), y: 100 },
+    { x: "Jan", y: 10 },
+    { x: "Feb", y: 20 },
+    { x: "Mar", y: 15 },
   ],
 ];
 export const dropdownData = [
@@ -1513,7 +1500,6 @@ export const lineCustomSeries = [
     marker: { visible: true, width: 10, height: 10 },
     type: "Line",
   },
-
   {
     dataSource: lineChartData[1],
     xName: "x",
@@ -1523,7 +1509,6 @@ export const lineCustomSeries = [
     marker: { visible: true, width: 10, height: 10 },
     type: "Line",
   },
-
   {
     dataSource: lineChartData[2],
     xName: "x",
