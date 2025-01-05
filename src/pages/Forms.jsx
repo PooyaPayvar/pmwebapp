@@ -4,8 +4,8 @@ function Forms() {
   const [rows, setRows] = useState([
     {
       id: 1,
-      formCode: generateFormCode("Data 2"),
-      section: "Data 2",
+      formCode: generateFormCode("Sanding"),
+      section: "chipper",
       machineName: "Data 3",
       shift: "Data 4",
       operatorName: "Data 5",
@@ -25,20 +25,29 @@ function Forms() {
 
   function generateFormCode(section) {
     const sectionCode = getSectionCode(section);
-    const monthCode = new Date().getMonth() + 1;
-    const monthString = monthCode < 10 ? `0${monthCode}` : `${monthCode}`;
+    const typeCode = getTypeCode(section);
     const uniqueCode = "01"; // You can implement a logic to generate unique codes if needed
-    return parseInt(`02${sectionCode}${monthString}${uniqueCode}`, 10);
+    return parseInt(`02${sectionCode}${typeCode}${uniqueCode}`, 10);
   }
 
   function getSectionCode(section) {
     switch (section) {
-      case "Data 2":
+      case "Sanding":
         return "01";
-      case "Data 3":
+      case "Chipper":
         return "02";
-      case "Data 4":
-        return "03";
+      // Add more cases as needed
+      default:
+        return "00";
+    }
+  }
+
+  function getTypeCode(section) {
+    switch (section) {
+      case "Sanding":
+        return "09";
+      case "Chipper":
+        return "01";
       // Add more cases as needed
       default:
         return "00";
@@ -90,7 +99,7 @@ function Forms() {
   };
 
   return (
-    <div className="p-4 relative">
+    <div className="p-4">
       <button
         className="bg-red-500 text-white px-4 py-2 rounded mb-4"
         onClick={handleDelete}
