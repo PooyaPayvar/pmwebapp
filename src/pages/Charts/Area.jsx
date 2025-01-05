@@ -8,7 +8,7 @@ import {
   areaPrimaryYAxis,
 } from "../../data/dummy";
 
-function BarsChartStacked() {
+function Area() {
   const { currentMode } = useStateContext();
 
   return (
@@ -37,4 +37,4 @@ function BarsChartStacked() {
   );
 }
 
-export default BarsChartStacked;
+export default Area;
