@@ -4,7 +4,7 @@ function Forms() {
   const [rows, setRows] = useState([
     {
       id: 1,
-      formCode: "Data 1",
+      formCode: generateFormCode("Data 2"),
       section: "Data 2",
       machineName: "Data 3",
       shift: "Data 4",
@@ -15,12 +15,35 @@ function Forms() {
       startDate: "Data 9",
       problemDescription: "Data 10",
       isEditing: false,
+      isSelected: false,
     },
     // Add more rows as needed
   ]);
   const [show, setShow] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const [currentRow, setCurrentRow] = useState(null);
+
+  function generateFormCode(section) {
+    const sectionCode = getSectionCode(section);
+    const monthCode = new Date().getMonth() + 1;
+    const monthString = monthCode < 10 ? `0${monthCode}` : `${monthCode}`;
+    const uniqueCode = "01"; // You can implement a logic to generate unique codes if needed
+    return parseInt(`02${sectionCode}${monthString}${uniqueCode}`, 10);
+  }
+
+  function getSectionCode(section) {
+    switch (section) {
+      case "Data 2":
+        return "01";
+      case "Data 3":
+        return "02";
+      case "Data 4":
+        return "03";
+      // Add more cases as needed
+      default:
+        return "00";
+    }
+  }
 
   const handleClose = () => setShow(false);
   const handleShow = (row) => {
@@ -34,15 +57,17 @@ function Forms() {
     handleClose();
   };
 
-  const handleEdit = (id) => {
+  const handleDoubleClick = (id, field) => {
     setRows(
-      rows.map((row) => (row.id === id ? { ...row, isEditing: true } : row))
+      rows.map((row) => (row.id === id ? { ...row, isEditing: field } : row))
     );
   };
 
-  const handleSave = (id) => {
+  const handleSave = (id, field, value) => {
     setRows(
-      rows.map((row) => (row.id === id ? { ...row, isEditing: false } : row))
+      rows.map((row) =>
+        row.id === id ? { ...row, [field]: value, isEditing: false } : row
+      )
     );
   };
 
@@ -52,11 +77,30 @@ function Forms() {
     );
   };
 
+  const handleSelect = (id) => {
+    setRows(
+      rows.map((row) =>
+        row.id === id ? { ...row, isSelected: !row.isSelected } : row
+      )
+    );
+  };
+
+  const handleDelete = () => {
+    setRows(rows.filter((row) => !row.isSelected));
+  };
+
   return (
-    <div className="p-4">
+    <div className="p-4 relative">
+      <button
+        className="bg-red-500 text-white px-4 py-2 rounded mb-4"
+        onClick={handleDelete}
+      >
+        Delete Selected
+      </button>
       <table className="min-w-full bg-white border border-gray-200 z-0">
         <thead>
           <tr>
+            <th className="py-2 px-4 border-b">Select</th>
             <th className="py-2 px-4 border-b">#</th>
             <th className="py-2 px-4 border-b">Form Code</th>
             <th className="py-2 px-4 border-b">Section</th>
@@ -74,136 +118,47 @@ function Forms() {
         <tbody>
           {rows.map((row) => (
             <tr key={row.id}>
-              <td className="py-2 px-4 border-b">{row.id}</td>
-              {row.isEditing ? (
-                <>
-                  <td className="py-2 px-4 border-b">
-                    <input
-                      type="text"
-                      value={row.formCode}
-                      onChange={(e) =>
-                        handleChange(row.id, "formCode", e.target.value)
-                      }
-                    />
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    <input
-                      type="text"
-                      value={row.section}
-                      onChange={(e) =>
-                        handleChange(row.id, "section", e.target.value)
-                      }
-                    />
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    <input
-                      type="text"
-                      value={row.machineName}
-                      onChange={(e) =>
-                        handleChange(row.id, "machineName", e.target.value)
-                      }
-                    />
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    <input
-                      type="text"
-                      value={row.shift}
-                      onChange={(e) =>
-                        handleChange(row.id, "shift", e.target.value)
-                      }
-                    />
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    <input
-                      type="text"
-                      value={row.operatorName}
-                      onChange={(e) =>
-                        handleChange(row.id, "operatorName", e.target.value)
-                      }
-                    />
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    <input
-                      type="text"
-                      value={row.formDate}
-                      onChange={(e) =>
-                        handleChange(row.id, "formDate", e.target.value)
-                      }
-                    />
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    <input
-                      type="text"
-                      value={row.problemType}
-                      onChange={(e) =>
-                        handleChange(row.id, "problemType", e.target.value)
-                      }
-                    />
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    <input
-                      type="text"
-                      value={row.stopStatus}
-                      onChange={(e) =>
-                        handleChange(row.id, "stopStatus", e.target.value)
-                      }
-                    />
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    <input
-                      type="text"
-                      value={row.startDate}
-                      onChange={(e) =>
-                        handleChange(row.id, "startDate", e.target.value)
-                      }
-                    />
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    <input
-                      type="text"
-                      value={row.problemDescription}
-                      onChange={(e) =>
-                        handleChange(
-                          row.id,
-                          "problemDescription",
-                          e.target.value
-                        )
-                      }
-                    />
-                  </td>
-                </>
-              ) : (
-                <>
-                  <td className="py-2 px-4 border-b">{row.formCode}</td>
-                  <td className="py-2 px-4 border-b">{row.section}</td>
-                  <td className="py-2 px-4 border-b">{row.machineName}</td>
-                  <td className="py-2 px-4 border-b">{row.shift}</td>
-                  <td className="py-2 px-4 border-b">{row.operatorName}</td>
-                  <td className="py-2 px-4 border-b">{row.formDate}</td>
-                  <td className="py-2 px-4 border-b">{row.problemType}</td>
-                  <td className="py-2 px-4 border-b">{row.stopStatus}</td>
-                  <td className="py-2 px-4 border-b">{row.startDate}</td>
-                  <td className="py-2 px-4 border-b">
-                    {row.problemDescription}
-                  </td>
-                </>
-              )}
               <td className="py-2 px-4 border-b">
-                {row.isEditing ? (
-                  <button
-                    className="bg-green-500 text-white px-4 py-2 rounded mr-2"
-                    onClick={() => handleSave(row.id)}
-                  >
-                    Save
-                  </button>
-                ) : (
-                  <button
-                    className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
-                    onClick={() => handleEdit(row.id)}
-                  >
-                    Edit
-                  </button>
-                )}
+                <input
+                  type="checkbox"
+                  checked={row.isSelected}
+                  onChange={() => handleSelect(row.id)}
+                />
+              </td>
+              <td className="py-2 px-4 border-b">{row.id}</td>
+              {[
+                "formCode",
+                "section",
+                "machineName",
+                "shift",
+                "operatorName",
+                "formDate",
+                "problemType",
+                "stopStatus",
+                "startDate",
+                "problemDescription",
+              ].map((field) => (
+                <td
+                  key={field}
+                  className="py-2 px-4 border-b"
+                  onDoubleClick={() => handleDoubleClick(row.id, field)}
+                >
+                  {row.isEditing === field ? (
+                    <input
+                      type="text"
+                      value={row[field]}
+                      onChange={(e) =>
+                        handleChange(row.id, field, e.target.value)
+                      }
+                      onBlur={(e) => handleSave(row.id, field, e.target.value)}
+                      autoFocus
+                    />
+                  ) : (
+                    row[field]
+                  )}
+                </td>
+              ))}
+              <td className="py-2 px-4 border-b">
                 <button
                   className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
                   onClick={() => handleShow(row)}

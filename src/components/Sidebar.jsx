@@ -16,7 +16,7 @@ import {
   AiOutlineStock,
 } from "react-icons/ai";
 
-const Sidebar = ({ userRole = 'operator' }) => {
+const Sidebar = ({ userRole }) => {
   const { currentColor, activeMenu, setActiveMenu, screenSize } =
     useStateContext();
 
