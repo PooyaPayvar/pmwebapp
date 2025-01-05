@@ -36,7 +36,7 @@ function Start() {
               onClick={() => {
                 navigate("/login");
               }}
-              className=" w-full h-[50px] bg-[#fff] border-[none] 
+              className="w-full h-[50px] bg-[#fff] border-[none] 
               outline-[none] rounded-[40px] [box-shadow:0_0_10px_rgba(0,_0,_0,_0.1)] 
               cursor-pointer text-[16px] text-[#333] font-bold mt-[45px] mx-[0] mb-[15px]"
             >
