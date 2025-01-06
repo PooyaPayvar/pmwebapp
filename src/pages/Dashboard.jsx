@@ -1,13 +1,12 @@
 import React from "react";
-import { DropDownListComponent } from "@syncfusion/ej2-react-dropdowns";
-
+import { DropDownList } from "@progress/kendo-react-dropdowns";
 import { Stacked, Pie, LineChart } from "../components";
 import { earningData, dropdownData, ecomPieChartData } from "../data/dummy";
 import { useStateContext } from "../contexts/ContextProvider";
 
 const DropDown = ({ currentMode }) => (
   <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
-    <DropDownListComponent
+    <DropDownList
       id="time"
       fields={{ text: "Time", value: "Id" }}
       style={{ border: "none", color: currentMode === "Dark" && "white" }}

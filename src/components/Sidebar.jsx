@@ -2,13 +2,13 @@ import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import { SiShopware } from "react-icons/si";
 import { MdOutlineCancel } from "react-icons/md";
-import { TooltipComponent } from "@syncfusion/ej2-react-popups";
+import Tooltip from "@mui/material/Tooltip";
 
 import { useStateContext } from "../contexts/ContextProvider"; // Ensure this path is correct
 import { FiPieChart, FiShoppingBag } from "react-icons/fi";
 import { RiContactsLine } from "react-icons/ri";
 import { FaWpforms } from "react-icons/fa6";
-import { BsBarChart, BsKanban } from "react-icons/bs";
+import { BsKanban } from "react-icons/bs";
 import {
   AiOutlineAreaChart,
   AiOutlineBarChart,
@@ -53,7 +53,6 @@ const Sidebar = ({ userRole }) => {
     { name: "area", icon: <AiOutlineAreaChart /> },
     { name: "bar", icon: <AiOutlineBarChart /> },
     { name: "pie", icon: <FiPieChart /> },
-    { name: "color-mapping", icon: <BsBarChart /> },
     { name: "stacked", icon: <AiOutlineBarChart /> },
   ];
 
@@ -75,7 +74,7 @@ const Sidebar = ({ userRole }) => {
             >
               <SiShopware /> <span>Preventive Maintenance</span>
             </Link>
-            <TooltipComponent content="Menu" position="BottomCenter">
+            <Tooltip content="Menu" position="BottomCenter">
               <button
                 type="button"
                 onClick={() => setActiveMenu(!activeMenu)}
@@ -84,7 +83,7 @@ const Sidebar = ({ userRole }) => {
               >
                 <MdOutlineCancel />
               </button>
-            </TooltipComponent>
+            </Tooltip>
           </div>
           <div className="mt-10">
             {links.map((link) => (

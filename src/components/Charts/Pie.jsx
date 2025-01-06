@@ -1,46 +1,32 @@
-import React from 'react';
-import { AccumulationChartComponent, AccumulationSeriesCollectionDirective, AccumulationSeriesDirective, AccumulationLegend, PieSeries, AccumulationDataLabel, Inject, AccumulationTooltip } from '@syncfusion/ej2-react-charts';
+import React from "react";
+import ReactApexChart from "react-apexcharts";
+import { ChartsHeader } from "../../components/";
+import { useStateContext } from "../../contexts/ContextProvider";
+import { pieChartData } from "../../data/dummy"; // Importing the data
 
-import { useStateContext } from '../../contexts/ContextProvider';
-
-const Doughnut = ({ id, data, legendVisiblity, height }) => {
+function Pie() {
   const { currentMode } = useStateContext();
 
   return (
-    <AccumulationChartComponent
-      id={id}
-      legendSettings={{ visible: legendVisiblity, background: 'white' }}
-      height={height}
-      background={currentMode === 'Dark' ? '#33373E' : '#fff'}
-      tooltip={{ enable: true }}
-    >
-      <Inject services={[AccumulationLegend, PieSeries, AccumulationDataLabel, AccumulationTooltip]} />
-      <AccumulationSeriesCollectionDirective>
-        <AccumulationSeriesDirective
-          name="Sale"
-          dataSource={data}
-          xName="x"
-          yName="y"
-          innerRadius="40%"
-          startAngle={0}
-          endAngle={360}
-          radius="70%"
-          explode
-          explodeOffset="10%"
-          explodeIndex={2}
-          dataLabel={{
-            visible: true,
-            name: 'text',
-            position: 'Inside',
-            font: {
-              fontWeight: '600',
-              color: '#fff',
+    <div className="m-4 md:m-10 mt-24 p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl">
+      <ChartsHeader category="Pie" title="Forms Numbers in Month" />
+      <div id="chart" className="w-full">
+        <ReactApexChart
+          options={{
+            chart: {
+              id: "basic-pie",
             },
+            background: currentMode === "Dark" ? "#33373E" : "#fff",
+            labels: pieChartData.map((item) => item.x), // Adding labels for the pie chart
           }}
+          series={pieChartData.map((item) => item.y)} // Using the imported data
+          type="pie"
+          height={350}
         />
-      </AccumulationSeriesCollectionDirective>
-    </AccumulationChartComponent>
+      </div>
+      <div id="html-dist" className="w-full"></div>
+    </div>
   );
-};
+}
 
-export default Doughnut;
+export default Pie;
