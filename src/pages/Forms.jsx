@@ -4,54 +4,127 @@ function Forms() {
   const [rows, setRows] = useState([
     {
       id: 1,
-      formCode: generateFormCode("Chipper"),
       section: "chipper",
-      machineName: "Data 3",
-      shift: "Data 4",
-      operatorName: "Data 5",
-      formDate: "Data 6",
-      problemType: "Data 7",
-      stopStatus: "Data 8",
-      startDate: "Data 9",
-      problemDescription: "Data 10",
+      machineName: "Push Feeder",
+      equipmentName: "Pusher",
+      shift: "A",
+      operatorName: "Pooya Payvar",
+      formDate: "1403/10/16",
+      problemType: "Mechanic",
+      stopStatus: "Yes",
+      stopDate: "1403/10/16",
+      startDate: "1403/10/16",
+      problemDescription: "بوش فیدر مشکل دارد",
+      isEditing: false,
+      isSelected: false,
+    },
+    {
+      id: 2,
+      section: "sanding",
+      machineName: "Push Feeder",
+      equipmentName: "Pusher",
+      shift: "A",
+      operatorName: "Pooya Payvar",
+      formDate: "1403/01/16",
+      problemType: "Mechanic",
+      stopStatus: "Yes",
+      stopDate: "1403/10/16",
+      startDate: "1403/10/16",
+      problemDescription: "بوش فیدر مشکل دارد",
+      isEditing: false,
+      isSelected: false,
+    },
+    {
+      id: 3,
+      section: "refiner",
+      machineName: "Push Feeder",
+      equipmentName: "Pusher",
+      shift: "A",
+      operatorName: "Pooya Payvar",
+      formDate: "1403/05/16",
+      problemType: "Mechanic",
+      stopStatus: "Yes",
+      stopDate: "1403/10/16",
+      startDate: "1403/10/16",
+      problemDescription: "بوش فیدر مشکل دارد",
+      isEditing: false,
+      isSelected: false,
+    },
+    {
+      id: 4,
+      section: "steamboiler",
+      machineName: "Push Feeder",
+      equipmentName: "Pusher",
+      shift: "A",
+      operatorName: "Pooya Payvar",
+      formDate: "1403/08/16",
+      problemType: "Mechanic",
+      stopStatus: "Yes",
+      stopDate: "1403/10/16",
+      startDate: "1403/10/16",
+      problemDescription: "بوش فیدر مشکل دارد",
+      isEditing: false,
+      isSelected: false,
+    },
+    {
+      id: 5,
+      section: "chipper",
+      machineName: "Push Feeder",
+      equipmentName: "Pusher",
+      shift: "A",
+      operatorName: "Pooya Payvar",
+      formDate: "1403/09/16",
+      problemType: "Mechanic",
+      stopStatus: "Yes",
+      stopDate: "1403/10/16",
+      startDate: "1403/10/16",
+      problemDescription: "بوش فیدر مشکل دارد",
       isEditing: false,
       isSelected: false,
     },
     // Add more rows as needed
   ]);
+
   const [show, setShow] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
-  const [currentRow, setCurrentRow] = useState(null);
+  const [setCurrentRow] = useState(null);
 
-  function generateFormCode(section) {
+  function generateFormCode(section, formDate, rowIndex) {
     const sectionCode = getSectionCode(section);
-    const typeCode = getTypeCode(section);
-    const uniqueCode = "01"; // You can implement a logic to generate unique codes if needed
-    return parseInt(`02${sectionCode}${typeCode}${uniqueCode}`, 10);
+    const typeCode = getTypeCode(formDate);
+    const uniqueCode = (rowIndex + 1).toString().padStart(2, "0"); // Ensure the row index is always two digits
+    return `02${sectionCode}${typeCode}${uniqueCode}`;
   }
 
   function getSectionCode(section) {
-    switch (section) {
-      case "Sanding":
+    switch (section.toLowerCase()) {
+      case "chipper":
         return "01";
-      case "Chipper":
+      case "refiner":
         return "02";
-      // Add more cases as needed
+      case "steam boiler":
+        return "03";
+      case "imeas":
+        return "04";
+      case "energy plant":
+        return "05";
+      case "before press":
+        return "06";
+      case "press":
+        return "07";
+      case "after press":
+        return "08";
+      case "sanding":
+        return "10";
       default:
         return "00";
     }
   }
 
-  function getTypeCode(section) {
-    switch (section) {
-      case "Sanding":
-        return "09";
-      case "Chipper":
-        return "01";
-      // Add more cases as needed
-      default:
-        return "00";
-    }
+  function getTypeCode(formDate) {
+    const dateParts = formDate.split("/");
+    const month = dateParts[1]; // فرمت تاریخ همیشه اینجوری است "YYYY/MM/DD"
+    return month.padStart(2, "0"); // ماه همیشه دو رقم است
   }
 
   const handleClose = () => setShow(false);
@@ -114,18 +187,20 @@ function Forms() {
             <th className="py-2 px-4 border-b">Form Code</th>
             <th className="py-2 px-4 border-b">Section</th>
             <th className="py-2 px-4 border-b">Machine Name</th>
+            <th className="py-2 px-4 border-b">Equipment Name</th>
             <th className="py-2 px-4 border-b">Shift</th>
             <th className="py-2 px-4 border-b">Operator Name</th>
             <th className="py-2 px-4 border-b">Form Date</th>
             <th className="py-2 px-4 border-b">Problem Type</th>
             <th className="py-2 px-4 border-b">Stop Status</th>
+            <th className="py-2 px-4 border-b">Stop Date</th>
             <th className="py-2 px-4 border-b">Start Date</th>
             <th className="py-2 px-4 border-b">Problem Description</th>
             <th className="py-2 px-4 border-b">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {rows.map((row) => (
+          {rows.map((row, index) => (
             <tr key={row.id}>
               <td className="py-2 px-4 border-b">
                 <input
@@ -135,15 +210,19 @@ function Forms() {
                 />
               </td>
               <td className="py-2 px-4 border-b">{row.id}</td>
+              <td className="py-2 px-4 border-b">
+                {generateFormCode(row.section, row.formDate, index)}
+              </td>
               {[
-                "formCode",
                 "section",
                 "machineName",
+                "equipmentName",
                 "shift",
                 "operatorName",
                 "formDate",
                 "problemType",
                 "stopStatus",
+                "stopDate",
                 "startDate",
                 "problemDescription",
               ].map((field) => (
