@@ -1550,9 +1550,9 @@ export const ecomPieChartData = [
   { x: "مهر", y: 24, text: "35%" },
   { x: "آبان", y: 24, text: "15%" },
   { x: "آذر", y: 24, text: "25%" },
-  { x: "دی", y: 24, text: "25%" },
-  { x: "بهمن", y: 24, text: "25%" },
-  { x: "اسفند", y: 24, text: "25%" },
+  { x: "دی", y: 24, text: "30%" },
+  { x: "بهمن", y: 24, text: "32%" },
+  { x: "اسفند", y: 24, text: "38%" },
 ];
 
 export const stackedChartData = [

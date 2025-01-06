@@ -1,8 +1,9 @@
 import React from "react";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
-import { Stacked, Pie, LineChart } from "../components";
+import { Stacked, LineChart } from "../components";
 import { earningData, dropdownData, ecomPieChartData } from "../data/dummy";
 import { useStateContext } from "../contexts/ContextProvider";
+import Pie from "../components/Charts/Pie";
 
 const DropDown = ({ currentMode }) => (
   <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
@@ -85,9 +86,9 @@ function Dashboard() {
 
             <div className="w-40">
               <Pie
-                id="pie-chart"
+                id="basic-pie"
                 data={ecomPieChartData}
-                legendVisiblity={false}
+                legendVisiblity={true}
                 height="160px"
               />
             </div>

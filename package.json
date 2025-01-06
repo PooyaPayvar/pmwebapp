@@ -29,6 +29,7 @@
     "@schedule-x/events-service": "^2.12.1",
     "@schedule-x/react": "^2.12.1",
     "@schedule-x/theme-default": "^2.12.1",
+    "@syncfusion/ej2-react-popups": "^28.1.33",
     "apex-grid": "^1.0.1",
     "apexcharts": "^4.3.0",
     "axios": "^1.7.9",
