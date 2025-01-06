@@ -87,7 +87,8 @@ function Forms() {
 
   const [show, setShow] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
-  const [setCurrentRow] = useState(null);
+
+  const [currentRow, setCurrentRow] = useState(null); // eslint-disable-line no-unused-vars
 
   function generateFormCode(section, formDate, rowIndex) {
     const sectionCode = getSectionCode(section);
@@ -100,22 +101,26 @@ function Forms() {
     switch (section.toLowerCase()) {
       case "chipper":
         return "01";
-      case "refiner":
+      case "conveyor line":
         return "02";
-      case "steam boiler":
+      case "dryer air graider":
         return "03";
-      case "imeas":
+      case "refiner":
         return "04";
-      case "energy plant":
-        return "05";
-      case "before press":
+      case "Before Press":
         return "06";
-      case "press":
+      case "Press":
         return "07";
-      case "after press":
+      case "After Press":
         return "08";
-      case "sanding":
+      case "Sanding":
+        return "09";
+      case "Cooling System":
         return "10";
+      case "Steam Boiler":
+        return "11";
+      case "General":
+        return "15";
       default:
         return "00";
     }
