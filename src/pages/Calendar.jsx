@@ -24,10 +24,16 @@ function Calendar() {
   const [modalMode, setModalMode] = useState("edit"); // 'edit' or 'create'
   const modalRef = useRef(null);
 
+  // Get current date in YYYY-MM-DD format
+  const currentDate = new Date();
+  const formattedDate = `${currentDate.getFullYear()}-${String(
+    currentDate.getMonth() + 1
+  ).padStart(2, "0")}-${String(currentDate.getDate()).padStart(2, "0")}`;
+
   const calendarApp = useCalendarApp({
     views: [createViewWeek(), createViewMonthGrid()],
     events: events,
-    selectedDate: "2025-01-01",
+    selectedDate: formattedDate, // Set selectedDate to current date
     plugins: [createEventModalPlugin(), createDragAndDropPlugin()],
     onEventClick: (args) => {
       setSelectedEvent(args.event);
@@ -115,14 +121,14 @@ function Calendar() {
             </h2>
             <input
               type="text"
-              value={selectedEvent?.title || ""} // Use || '' to handle null or undefined
+              value={selectedEvent?.title || ""}
               onChange={(e) =>
                 setSelectedEvent({ ...selectedEvent, title: e.target.value })
               }
               className="border border-gray-300 p-2 rounded w-full mb-4"
             />
             <textarea
-              value={selectedEvent?.description || ""} // Use || '' to handle null or undefined
+              value={selectedEvent?.description || ""}
               onChange={(e) =>
                 setSelectedEvent({
                   ...selectedEvent,
