@@ -1,76 +1,163 @@
-import React, { useState } from "react";
-import {
-  ScheduleComponent,
-  ViewsDirective,
-  ViewDirective,
-  Day,
-  Week,
-  WorkWeek,
-  Month,
-  Agenda,
-  Inject,
-  Resize,
-  DragAndDrop,
-} from "@syncfusion/ej2-react-schedule";
-import { DatePickerComponent } from "@syncfusion/ej2-react-calendars";
+import React, { useState, useRef } from "react";
+import { useCalendarApp, ScheduleXCalendar } from "@schedule-x/react";
+import { createViewMonthGrid, createViewWeek } from "@schedule-x/calendar";
+import { createEventModalPlugin } from "@schedule-x/event-modal";
+import { createDragAndDropPlugin } from "@schedule-x/drag-and-drop";
+import moment from "moment-jalaali"; // Import moment-jalaali for Persian calendar
 
-import { scheduleData } from "../data/dummy";
-import { Header } from "../components";
+import "./calendar.css";
+import "@schedule-x/theme-default/dist/index.css";
 
-// eslint-disable-next-line react/destructuring-assignment
-const PropertyPane = (props) => <div className="mt-5">{props.children}</div>;
+function Calendar() {
+  const [events, setEvents] = useState([
+    {
+      id: 1,
+      title: "My New Event",
+      start: "2025-01-06 00:00",
+      end: "2025-01-06 00:00",
+      description: "My Cool",
+    },
+  ]);
 
-function Scheduler() {
-  const [scheduleObj, setScheduleObj] = useState();
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMode, setModalMode] = useState("edit"); // 'edit' or 'create'
+  const modalRef = useRef(null);
 
-  const change = (args) => {
-    scheduleObj.selectedDate = args.value;
-    scheduleObj.dataBind();
+  const calendarApp = useCalendarApp({
+    views: [createViewWeek(), createViewMonthGrid()],
+    events: events,
+    selectedDate: "2025-01-01",
+    plugins: [createEventModalPlugin(), createDragAndDropPlugin()],
+    onEventClick: (args) => {
+      setSelectedEvent(args.event);
+      setModalMode("edit");
+      setShowModal(true);
+    },
+  });
+
+  const handleDateSelect = (args) => {
+    const newEvent = {
+      id: events.length + 1, // Generate a new unique id
+      title: "",
+      start: moment(args.date).format("YYYY-MM-DD HH:mm"),
+      end: moment(args.date).format("YYYY-MM-DD HH:mm"),
+      description: "",
+    };
+    setSelectedEvent(newEvent);
+    setModalMode("create");
+    setShowModal(true);
   };
 
-  const onDragStart = (arg) => {
-    // eslint-disable-next-line no-param-reassign
-    arg.navigation.enable = true;
+  const addEvent = (newEvent) => {
+    setEvents([...events, newEvent]);
+    setShowModal(false);
+  };
+
+  const deleteEvent = (eventId) => {
+    setEvents(events.filter((event) => event.id !== eventId));
+    setShowModal(false);
+  };
+
+  const editEvent = (updatedEvent) => {
+    setEvents(
+      events.map((event) =>
+        event.id === updatedEvent.id ? updatedEvent : event
+      )
+    );
+    setShowModal(false);
+  };
+
+  const saveNewEvent = () => {
+    if (modalMode === "create" && selectedEvent) {
+      addEvent(selectedEvent);
+    } else if (modalMode === "edit" && selectedEvent) {
+      editEvent(selectedEvent);
+    }
+  };
+
+  const convertToJalaali = (date) => {
+    return moment(date).format("jYYYY/jMM/jDD");
   };
 
   return (
-    <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-      <Header category="App" title="Calendar" />
-      <ScheduleComponent
-        height="650px"
-        ref={(schedule) => setScheduleObj(schedule)}
-        selectedDate={new Date(2021, 0, 10)}
-        eventSettings={{ dataSource: scheduleData }}
-        dragStart={onDragStart}
-      >
-        <ViewsDirective>
-          {["Day", "Week", "WorkWeek", "Month", "Agenda"].map((item) => (
-            <ViewDirective key={item} option={item} />
-          ))}
-        </ViewsDirective>
-        <Inject
-          services={[Day, Week, WorkWeek, Month, Agenda, Resize, DragAndDrop]}
-        />
-      </ScheduleComponent>
-      <PropertyPane>
-        <table style={{ width: "100%", background: "white" }}>
-          <tbody>
-            <tr style={{ height: "50px" }}>
-              <td style={{ width: "100%" }}>
-                <DatePickerComponent
-                  value={new Date(2021, 0, 10)}
-                  showClearButton={false}
-                  placeholder="Current Date"
-                  floatLabelType="Always"
-                  change={change}
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </PropertyPane>
+    <div>
+      <ScheduleXCalendar
+        calendarApp={calendarApp}
+        enableDateSelection={true}
+        onDateSelect={handleDateSelect}
+      />
+      <div className="flex gap-4 mt-4">
+        <button
+          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+          onClick={() =>
+            addEvent({
+              id: events.length + 1,
+              title: "New Event",
+              start: convertToJalaali("2025-01-07 00:00"),
+              end: convertToJalaali("2025-01-07 00:00"),
+              description: "New Event Description",
+            })
+          }
+        >
+          Add Event
+        </button>
+      </div>
+
+      {showModal && (
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+          ref={modalRef}
+        >
+          <div className="bg-white p-4 rounded w-1/2">
+            <h2 className="text-xl mb-4">
+              {modalMode === "edit" ? "Edit Event" : "Create Event"}
+            </h2>
+            <input
+              type="text"
+              value={selectedEvent?.title || ""} // Use || '' to handle null or undefined
+              onChange={(e) =>
+                setSelectedEvent({ ...selectedEvent, title: e.target.value })
+              }
+              className="border border-gray-300 p-2 rounded w-full mb-4"
+            />
+            <textarea
+              value={selectedEvent?.description || ""} // Use || '' to handle null or undefined
+              onChange={(e) =>
+                setSelectedEvent({
+                  ...selectedEvent,
+                  description: e.target.value,
+                })
+              }
+              className="border border-gray-300 p-2 rounded w-full mb-4"
+            />
+            <div className="flex justify-end">
+              {modalMode === "edit" && (
+                <button
+                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 mr-2"
+                  onClick={() => deleteEvent(selectedEvent.id)}
+                >
+                  Delete
+                </button>
+              )}
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                onClick={saveNewEvent}
+              >
+                {modalMode === "edit" ? "Save" : "Create"}
+              </button>
+              <button
+                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 ml-2"
+                onClick={() => setShowModal(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
-export default Scheduler;
+export default Calendar;
