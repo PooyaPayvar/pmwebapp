@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Forms() {
+function Forms({ role = "operator" }) {
   const [rows, setRows] = useState([
     {
       id: 1,
@@ -179,8 +179,13 @@ function Forms() {
   return (
     <div className="p-4">
       <button
-        className="bg-red-500 text-white px-4 py-2 rounded mb-4"
+        className={`bg-red-500 text-white px-4 py-2 rounded mb-4 ${
+          role === "operator" || role === "technician"
+            ? "cursor-not-allowed opacity-0"
+            : ""
+        }`}
         onClick={handleDelete}
+        disabled={role === "operator" || role === "technician"}
       >
         Delete
       </button>
@@ -253,8 +258,13 @@ function Forms() {
               ))}
               <td className="py-2 px-4 border-b">
                 <button
-                  className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                  className={`bg-blue-500 text-white px-4 py-2 rounded mr-2 ${
+                    role === "operator" || role === "technician"
+                      ? "cursor-not-allowed opacity-50"
+                      : ""
+                  }`}
                   onClick={() => handleShow(row)}
+                  disabled={role === "operator" || role === "technician"}
                 >
                   Send
                 </button>

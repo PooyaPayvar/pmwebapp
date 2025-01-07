@@ -1,8 +1,9 @@
 import React from "react";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
-import { LineChart, Pie } from "../components";
+import { LineChart } from "../components";
 import { earningData, dropdownData, ecomPieChartData } from "../data/dummy";
 import { useStateContext } from "../contexts/ContextProvider";
+import Forms from "./Forms";
 
 const DropDown = ({ currentMode }) => (
   <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
@@ -56,43 +57,12 @@ function Dashboard() {
           </div>
           <div className="mt-10 flex gap-10 flex-wrap justify-center">
             <div className=" border-r-1 border-color m-4 pr-10">
-              <div>
-                <p>
-                  <span className="text-3xl font-semibold">110</span>
-                  <span className="p-1.5 hover:drop-shadow-xl cursor-pointer rounded-full text-white bg-green-400 ml-3 text-xs">
-                    23%
-                  </span>
-                </p>
-                <p className="text-gray-500 mt-1">EM</p>
-              </div>
-              <div className="mt-8">
-                <p className="text-3xl font-semibold">220</p>
-
-                <p className="text-gray-500 mt-1">PM</p>
-              </div>
+              <Forms />
             </div>
-            <div>
-              {/* <Stacked currentMode={currentMode} width="320px" height="360px" /> */}
-            </div>
+            <div></div>
           </div>
         </div>
-        <div>
-          <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg rounded-2xl md:w-400 p-8 m-3 flex justify-center items-center gap-10">
-            <div>
-              <p className="text-2xl font-semibold ">750</p>
-              <p className="text-gray-400">All Forms</p>
-            </div>
-
-            <div className="w-40">
-              <Pie
-                id="basic-pie"
-                data={ecomPieChartData}
-                legendVisiblity={false}
-                height="160px"
-              />
-            </div>
-          </div>
-        </div>
+        <div></div>
       </div>
 
       <div className="flex gap-10 m-4 flex-wrap justify-center">
