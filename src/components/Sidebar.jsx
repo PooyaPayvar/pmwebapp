@@ -53,6 +53,7 @@ const Sidebar = ({ userRole }) => {
     { name: "area", icon: <AiOutlineAreaChart /> },
     { name: "bar", icon: <AiOutlineBarChart /> },
     { name: "pie", icon: <FiPieChart /> },
+    { name: "projects", icon: <FiPieChart /> },
   ];
 
   const links =
