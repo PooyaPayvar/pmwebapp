@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { FiPlus, FiTrash } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { FaFire } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const COLUMN_ORDER = ["backlog", "todo", "doing", "done"];
 
 const Kanban = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   // Mock user role for demonstration, you should get this from your auth system
-  const [userRole, setUserRole] = useState("operator"); // Possible values: "user", "operator", "technician"
-
+  const [userRole, setUserRole] = useState("user"); // Possible values: "user", "operator", "technician"
   useEffect(() => {
     const matchMedia = window.matchMedia("(prefers-color-scheme: dark)");
     setIsDarkMode(matchMedia.matches);
@@ -23,7 +23,7 @@ const Kanban = () => {
       <div
         className={`h-screen w-full ${
           isDarkMode
-            ? "bg-neutral-900 text-neutral-50"
+            ? "bg-white text-neutral-50"
             : "border-neutral-700 text-black"
         }`}
       >
@@ -215,7 +215,9 @@ const Column = ({
           />
         ))}
         <DropIndicator beforeId={null} column={column} />
-        <AddCard column={column} setCards={setCards} />
+        {column === "backlog" && (
+          <AddCard column={column} setCards={setCards} />
+        )}
       </div>
     </div>
   );
@@ -223,6 +225,10 @@ const Column = ({
 
 const Card = ({ title, id, column, handleDragStart, userRole }) => {
   const isDraggable = userRole !== "operator" && userRole !== "technician";
+  const navigate = useNavigate();
+  const handleDoubleClick = () => {
+    navigate('/projects'); // Navigate to the details page for the card
+  };
   return (
     <>
       <DropIndicator beforeId={id} column={column} />
@@ -235,6 +241,7 @@ const Card = ({ title, id, column, handleDragStart, userRole }) => {
             ? handleDragStart(e, { title, id, column })
             : e.preventDefault()
         }
+        onDoubleClick={handleDoubleClick} // Add double-click event
         className="cursor-grab rounded border border-neutral-700 bg-neutral-800 p-3 active:cursor-grabbing"
       >
         <p className="text-sm text-neutral-100">{title}</p>

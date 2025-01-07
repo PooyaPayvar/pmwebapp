@@ -25,6 +25,7 @@ import {
   TechnicianLogin,
   OperatorLogin,
   SubmitForm,
+  Projects,
 } from "./pages";
 
 import "./App.css";
@@ -152,6 +153,7 @@ const AppContent = ({
                 />
                 <Route path="/submitform" element={<SubmitForm />} />
                 <Route path="/kanban" element={<Kanban />} />
+                <Route path="/projects" element={<Projects />} />
                 <Route path="/calendar" element={<Calendar />} />
                 <Route path="/line" element={<Line />} />
                 <Route path="/area" element={<Area />} />

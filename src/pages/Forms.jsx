@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Forms({ role = "operator" }) {
+function Forms({ role }) {
   const [rows, setRows] = useState([
     {
       id: 1,
@@ -52,7 +52,7 @@ function Forms({ role = "operator" }) {
     },
     {
       id: 4,
-      section: "steamboiler",
+      section: "steam boiler",
       machineName: "Push Feeder",
       equipmentName: "Pusher",
       shift: "A",
@@ -68,7 +68,7 @@ function Forms({ role = "operator" }) {
     },
     {
       id: 5,
-      section: "chipper",
+      section: "before press",
       machineName: "Push Feeder",
       equipmentName: "Pusher",
       shift: "A",
