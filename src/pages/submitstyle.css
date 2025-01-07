@@ -76,7 +76,9 @@ textarea {
   height: 42px;
   margin: 8px 0;
 }
-.input-field input:is(:focus, :valid) {
+.input-field input,
+select,
+textarea:is(:focus, :valid) {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
 }
 .input-field input[type="date"] {

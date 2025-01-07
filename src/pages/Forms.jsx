@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Forms({ role }) {
+function Forms({ role = "operator" }) {
   const [rows, setRows] = useState([
     {
       id: 1,
@@ -185,7 +185,7 @@ function Forms({ role }) {
         onClick={handleDelete}
         disabled={role === "operator" || role === "technician"}
       >
-        Delete
+        حذف
       </button>
       <div className="overflow-x-auto mx-auto">
         <table className="min-w-fit bg-white border border-gray-200 rounded-s-md z-0">
@@ -265,7 +265,7 @@ function Forms({ role }) {
                       className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
                       onClick={() => handleShow(row)}
                     >
-                      Send
+                      ارسال
                     </button>
                   </td>
                 )}
@@ -278,32 +278,41 @@ function Forms({ role }) {
         <>
           <div className="fixed inset-0 bg-black bg-opacity-50 z-10"></div>
           <div className="fixed inset-0 flex items-center justify-center z-20">
-            <div className="bg-white p-4 rounded w-1/2">
-              <h2 className="text-xl mb-4">Send</h2>
+            <div className="bg-white p-4 rounded ">
+              <h2 className="text-xl mb-4">ارسال</h2>
               <select
                 className="border border-gray-300 p-2 rounded w-full mb-4"
                 value={selectedOption}
                 onChange={(e) => setSelectedOption(e.target.value)}
               >
-                <option value="">Select...</option>
-                <option value="mechanic">Mechanic</option>
-                <option value="electric">Electric</option>
-                <option value="utility">Utility</option>
-                <option value="metalworking">Metalworking</option>
-                <option value="production">Production</option>
+                <option value="mechanic" className="text-center">
+                  مهران الماسی فر
+                </option>
+                <option value="electric" className="text-center">
+                  مهدی زاده حسین
+                </option>
+                <option value="utility" className="text-center">
+                  محمد راشدی
+                </option>
+                <option value="metalworking" className="text-center">
+                  محسن اورامه
+                </option>
+                <option value="production" className="text-center">
+                  یونس حسین زاده
+                </option>
               </select>
               <div className="flex justify-end">
                 <button
                   className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
                   onClick={handleClose}
                 >
-                  Close
+                  بستن
                 </button>
                 <button
                   className="bg-blue-500 text-white px-4 py-2 rounded"
                   onClick={handleSend}
                 >
-                  Send
+                  ارسال
                 </button>
               </div>
             </div>
