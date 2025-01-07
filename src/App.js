@@ -10,10 +10,10 @@ import { FiSettings } from "react-icons/fi";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 
 import { Navbar, Sidebar, ThemeSettings } from "./components";
+import { Pie } from "./components";
 import {
   Dashboard,
   Calendar,
-  Stacked,
   Forms,
   OperatorSubmit,
   Kanban,
@@ -21,7 +21,6 @@ import {
   Area,
   Login,
   Bar,
-  Pie,
   Start,
   TechnicianLogin,
   OperatorLogin,
@@ -158,7 +157,6 @@ const AppContent = ({
                 <Route path="/area" element={<Area />} />
                 <Route path="/bar" element={<Bar />} />
                 <Route path="/pie" element={<Pie />} />
-                <Route path="/stacked" element={<Stacked />} />
               </>
             )}
           </Routes>

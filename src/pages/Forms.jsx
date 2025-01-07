@@ -182,7 +182,7 @@ function Forms() {
         className="bg-red-500 text-white px-4 py-2 rounded mb-4"
         onClick={handleDelete}
       >
-        Delete Selected
+        Delete
       </button>
       <table className="min-w-full bg-white border border-gray-200 z-0">
         <thead>

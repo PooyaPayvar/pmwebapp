@@ -1,6 +1,6 @@
 import React from "react";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
-import { LineChart } from "../components";
+import { LineChart, Pie } from "../components";
 import { earningData, dropdownData, ecomPieChartData } from "../data/dummy";
 import { useStateContext } from "../contexts/ContextProvider";
 
@@ -84,12 +84,12 @@ function Dashboard() {
             </div>
 
             <div className="w-40">
-              {/* <Pie
+              <Pie
                 id="basic-pie"
                 data={ecomPieChartData}
-                legendVisiblity={true}
+                legendVisiblity={false}
                 height="160px"
-              /> */}
+              />
             </div>
           </div>
         </div>
