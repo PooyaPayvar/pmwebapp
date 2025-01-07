@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Forms({ role }) {
+function Forms({ role = "operator" }) {
   const [rows, setRows] = useState([
     {
       id: 1,

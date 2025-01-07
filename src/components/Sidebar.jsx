@@ -38,7 +38,7 @@ const Sidebar = ({ userRole }) => {
   ];
 
   const technicianLinks = [
-    { name: "Dashboard", icon: <FiShoppingBag /> },
+    { name: "dashboard", icon: <FiShoppingBag /> },
     { name: "TechnicianSubmit", icon: <RiContactsLine /> },
     { name: "Forms", icon: <FaWpforms /> },
   ];
@@ -53,7 +53,6 @@ const Sidebar = ({ userRole }) => {
     { name: "area", icon: <AiOutlineAreaChart /> },
     { name: "bar", icon: <AiOutlineBarChart /> },
     { name: "pie", icon: <FiPieChart /> },
-    { name: "stacked", icon: <AiOutlineBarChart /> },
   ];
 
   const links =

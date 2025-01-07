@@ -1,168 +1,158 @@
-import React, { useState, useRef } from "react";
-import { useCalendarApp, ScheduleXCalendar } from "@schedule-x/react";
-import { createViewMonthGrid, createViewWeek } from "@schedule-x/calendar";
+import React, { useState, useRef, useEffect } from "react";
+import "./calendar.css";
+import { ScheduleXCalendar, useCalendarApp } from "@schedule-x/react";
+import { createViewWeek, createViewMonthGrid } from "@schedule-x/calendar";
+import "@schedule-x/theme-default/dist/index.css";
 import { createEventModalPlugin } from "@schedule-x/event-modal";
 import { createDragAndDropPlugin } from "@schedule-x/drag-and-drop";
-import moment from "moment-jalaali"; // Import moment-jalaali for Persian calendar
-
-import "./calendar.css";
-import "@schedule-x/theme-default/dist/index.css";
 
 function Calendar() {
-  const [events, setEvents] = useState([
-    {
-      id: 1,
-      title: "My New Event",
-      start: "2025-01-06 00:00",
-      end: "2025-01-06 00:00",
-      description: "My Cool",
-    },
-  ]);
-
-  const [selectedEvent, setSelectedEvent] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [modalMode, setModalMode] = useState("edit"); // 'edit' or 'create'
-  const modalRef = useRef(null);
-
-  // Get current date in YYYY-MM-DD format
-  const currentDate = new Date();
-  const formattedDate = `${currentDate.getFullYear()}-${String(
-    currentDate.getMonth() + 1
-  ).padStart(2, "0")}-${String(currentDate.getDate()).padStart(2, "0")}`;
-
-  const calendarApp = useCalendarApp({
-    views: [createViewWeek(), createViewMonthGrid()],
-    events: events,
-    selectedDate: formattedDate, // Set selectedDate to current date
-    plugins: [createEventModalPlugin(), createDragAndDropPlugin()],
-    onEventClick: (args) => {
-      setSelectedEvent(args.event);
-      setModalMode("edit");
-      setShowModal(true);
-    },
+    const calendarRef = useRef(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [eventData, setEventData] = useState({
+    title: "",
+    description: "",
   });
+    const calendar = useCalendarApp({
+        views: [createViewWeek(), createViewMonthGrid()],
+        events: [
+            {
+              id: 1,
+              title: "Sanding Lubrication",
+              start: "2025-01-07 00:00",
+              end: "2025-01-07 02:00",
+              description: "Push Feeder Need Lubrication",
+            },
+        ],
+        selectedDate: "2025-01-07",
+        plugins: [createEventModalPlugin(), createDragAndDropPlugin()],
+      });
 
-  const handleDateSelect = (args) => {
-    const newEvent = {
-      id: events.length + 1, // Generate a new unique id
-      title: "",
-      start: moment(args.date).format("YYYY-MM-DD HH:mm"),
-      end: moment(args.date).format("YYYY-MM-DD HH:mm"),
-      description: "",
+    // Function to handle the double click event on date cell
+    const handleDateCellDoubleClick = (dateString) => {
+        setSelectedDate(dateString);
+        setEventData({ title: "", description: "" });
+        setIsModalOpen(true);
     };
-    setSelectedEvent(newEvent);
-    setModalMode("create");
-    setShowModal(true);
+
+    // Add event listener to the calendar component
+    useEffect(() => {
+        if (calendarRef.current) {
+            const calendarContainer = calendarRef.current.querySelector(".sx__calendar");
+            calendarContainer.addEventListener('dblclick', (e) => {
+              if (e.target.classList.contains('sx__grid-item-date')) {
+                const dateString = e.target.getAttribute("data-date");
+                handleDateCellDoubleClick(dateString)
+                }
+            });
+        }
+        return () => {
+           if (calendarRef.current) {
+            const calendarContainer = calendarRef.current.querySelector(".sx__calendar");
+            calendarContainer.removeEventListener('dblclick', (e) => {
+             if (e.target.classList.contains('sx__grid-item-date')) {
+              const dateString = e.target.getAttribute("data-date");
+              handleDateCellDoubleClick(dateString)
+              }
+            });
+          }
+        };
+    }, []);
+
+
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEventData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const addEvent = (newEvent) => {
-    setEvents([...events, newEvent]);
-    setShowModal(false);
-  };
+  const handleSaveEvent = () => {
+      if (selectedDate) {
+           calendar.addEvent({
+            id: Date.now(),
+            title: eventData.title,
+            start: `${selectedDate} 00:00`,
+               end: `${selectedDate} 01:00`,
+            description: eventData.description,
+          });
 
-  const deleteEvent = (eventId) => {
-    setEvents(events.filter((event) => event.id !== eventId));
-    setShowModal(false);
-  };
+      setIsModalOpen(false);
+      }
+    };
 
-  const editEvent = (updatedEvent) => {
-    setEvents(
-      events.map((event) =>
-        event.id === updatedEvent.id ? updatedEvent : event
-      )
-    );
-    setShowModal(false);
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
-
-  const saveNewEvent = () => {
-    if (modalMode === "create" && selectedEvent) {
-      addEvent(selectedEvent);
-    } else if (modalMode === "edit" && selectedEvent) {
-      editEvent(selectedEvent);
-    }
-  };
-
-  const convertToJalaali = (date) => {
-    return moment(date).format("jYYYY/jMM/jDD");
+  const handleDeleteEvent = () => {
+    // Implement delete logic if editing an existing event.
+    setIsModalOpen(false);
   };
 
   return (
-    <div>
-      <ScheduleXCalendar
-        calendarApp={calendarApp}
-        enableDateSelection={true}
-        onDateSelect={handleDateSelect}
-      />
-      <div className="flex gap-4 mt-4">
-        <button
-          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-          onClick={() =>
-            addEvent({
-              id: events.length + 1,
-              title: "New Event",
-              start: convertToJalaali("2025-01-07 00:00"),
-              end: convertToJalaali("2025-01-07 00:00"),
-              description: "New Event Description",
-            })
-          }
-        >
-          Add Event
-        </button>
+    <>
+      <div className="m-4 md:m-10 mt-24 p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl"  ref={calendarRef}>
+        <ScheduleXCalendar calendarApp={calendar}  />
       </div>
+        {isModalOpen && (
+            <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center">
+                <div className="bg-white p-8 rounded-md shadow-xl">
+                    <h2 className="text-xl font-bold mb-4">Add/Edit Event</h2>
+                      {selectedDate &&
+                        <p className="mb-4"> Selected Date: {selectedDate}</p>
+                      }
 
-      {showModal && (
-        <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
-          ref={modalRef}
-        >
-          <div className="bg-white p-4 rounded w-1/2">
-            <h2 className="text-xl mb-4">
-              {modalMode === "edit" ? "Edit Event" : "Create Event"}
-            </h2>
-            <input
-              type="text"
-              value={selectedEvent?.title || ""}
-              onChange={(e) =>
-                setSelectedEvent({ ...selectedEvent, title: e.target.value })
-              }
-              className="border border-gray-300 p-2 rounded w-full mb-4"
-            />
-            <textarea
-              value={selectedEvent?.description || ""}
-              onChange={(e) =>
-                setSelectedEvent({
-                  ...selectedEvent,
-                  description: e.target.value,
-                })
-              }
-              className="border border-gray-300 p-2 rounded w-full mb-4"
-            />
-            <div className="flex justify-end">
-              {modalMode === "edit" && (
-                <button
-                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 mr-2"
-                  onClick={() => deleteEvent(selectedEvent.id)}
-                >
-                  Delete
-                </button>
-              )}
-              <button
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                onClick={saveNewEvent}
-              >
-                {modalMode === "edit" ? "Save" : "Create"}
-              </button>
-              <button
-                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 ml-2"
-                onClick={() => setShowModal(false)}
-              >
-                Cancel
-              </button>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
+                            Title
+                        </label>
+                        <input
+                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            type="text"
+                            name="title"
+                          value={eventData.title}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                      <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
+                            Description
+                        </label>
+                        <textarea
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            name="description"
+                            value={eventData.description}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+
+                    <div className="flex justify-end">
+                        <button
+                          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
+                            onClick={handleDeleteEvent}
+                        >
+                            Delete
+                        </button>
+                        <button
+                          className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
+                            onClick={handleCloseModal}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            onClick={handleSaveEvent}
+                        >
+                            Save
+                        </button>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      )}
-    </div>
+        )}
+    </>
   );
 }
 

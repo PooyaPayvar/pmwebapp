@@ -7,7 +7,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { FiSettings } from "react-icons/fi";
-import { TooltipComponent } from "@syncfusion/ej2-react-popups";
+import Tooltip from "@mui/material/Tooltip";
 
 import { Navbar, Sidebar, ThemeSettings } from "./components";
 import { Pie } from "./components";
@@ -89,7 +89,7 @@ const AppContent = ({
     <div className="flex relative dark:bg-main-dark-bg">
       {isLoggedIn && !hideComponents && (
         <div className="fixed right-4 bottom-4" style={{ zIndex: "1000" }}>
-          <TooltipComponent content="Settings" position="Top">
+          <Tooltip content="Settings" position="Top">
             <button
               type="button"
               onClick={() => setThemeSettings(true)}
@@ -98,7 +98,7 @@ const AppContent = ({
             >
               <FiSettings />
             </button>
-          </TooltipComponent>
+          </Tooltip>
         </div>
       )}
       {activeMenu && isLoggedIn && !hideComponents ? (

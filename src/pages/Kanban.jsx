@@ -2,8 +2,14 @@ import React, { useState, useEffect } from "react";
 import { FiPlus, FiTrash } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { FaFire } from "react-icons/fa";
+
+const COLUMN_ORDER = ["backlog", "todo", "doing", "done"];
+
 const Kanban = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  // Mock user role for demonstration, you should get this from your auth system
+  const [userRole, setUserRole] = useState("operator"); // Possible values: "user", "operator", "technician"
+
   useEffect(() => {
     const matchMedia = window.matchMedia("(prefers-color-scheme: dark)");
     setIsDarkMode(matchMedia.matches);
@@ -11,58 +17,68 @@ const Kanban = () => {
     matchMedia.addEventListener("change", handleChange);
     return () => matchMedia.removeEventListener("change", handleChange);
   }, []);
+
   return (
-    <div
-      className={`h-screen w-full ${
-        isDarkMode ? "bg-neutral-900 text-neutral-50" : "bg-white text-black"
-      }`}
-    >
-      {" "}
-      <Board isDarkMode={isDarkMode} />{" "}
+    <div className="m-4 md:m-10 mt-24 p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl">
+      <div
+        className={`h-screen w-full ${
+          isDarkMode
+            ? "bg-neutral-900 text-neutral-50"
+            : "border-neutral-700 text-black"
+        }`}
+      >
+        <Board isDarkMode={isDarkMode} userRole={userRole} />
+      </div>
     </div>
   );
 };
-const Board = ({ isDarkMode }) => {
+
+const Board = ({ isDarkMode, userRole }) => {
   const [cards, setCards] = useState(DEFAULT_CARDS);
+
   return (
     <div className="flex h-full w-full gap-3 overflow-scroll p-12">
-      {" "}
       <Column
         title="Backlog"
         column="backlog"
-        headingColor="text-neutral-500"
+        headingColor="dark:text-white text-black"
         cards={cards}
         setCards={setCards}
         isDarkMode={isDarkMode}
-      />{" "}
+        userRole={userRole}
+      />
       <Column
         title="TODO"
         column="todo"
-        headingColor="text-yellow-200"
+        headingColor="dark:text-yellow-200 text-yellow-500"
         cards={cards}
         setCards={setCards}
         isDarkMode={isDarkMode}
-      />{" "}
+        userRole={userRole}
+      />
       <Column
         title="In progress"
         column="doing"
-        headingColor="text-blue-200"
+        headingColor="dark:text-blue-200 text-blue-500"
         cards={cards}
         setCards={setCards}
         isDarkMode={isDarkMode}
-      />{" "}
+        userRole={userRole}
+      />
       <Column
         title="Complete"
         column="done"
-        headingColor="text-emerald-200"
+        headingColor="dark:text-emerald-200 text-emerald-500"
         cards={cards}
         setCards={setCards}
         isDarkMode={isDarkMode}
-      />{" "}
-      <BurnBarrel setCards={setCards} isDarkMode={isDarkMode} />{" "}
+        userRole={userRole}
+      />
+      <BurnBarrel setCards={setCards} isDarkMode={isDarkMode} />
     </div>
   );
 };
+
 const Column = ({
   title,
   headingColor,
@@ -70,52 +86,75 @@ const Column = ({
   column,
   setCards,
   isDarkMode,
+  userRole,
 }) => {
   const [active, setActive] = useState(false);
+
   const handleDragStart = (e, card) => {
     e.dataTransfer.setData("cardId", card.id);
   };
+
   const handleDragEnd = (e) => {
+    // Check if user role is Operator or Technician
+    if (userRole === "operator" || userRole === "technician") {
+      e.preventDefault();
+      setActive(false);
+      clearHighlights();
+      return; // Prevents card move
+    }
+
     const cardId = e.dataTransfer.getData("cardId");
     setActive(false);
     clearHighlights();
     const indicators = getIndicators();
     const { element } = getNearestIndicator(e, indicators);
     const before = element.dataset.before || "-1";
+
     if (before !== cardId) {
       let copy = [...cards];
       let cardToTransfer = copy.find((c) => c.id === cardId);
       if (!cardToTransfer) return;
-      cardToTransfer = { ...cardToTransfer, column };
-      copy = copy.filter((c) => c.id !== cardId);
-      const moveToBack = before === "-1";
-      if (moveToBack) {
-        copy.push(cardToTransfer);
-      } else {
-        const insertAtIndex = copy.findIndex((el) => el.id === before);
-        if (insertAtIndex === undefined) return;
-        copy.splice(insertAtIndex, 0, cardToTransfer);
+
+      const currentColumnIndex = COLUMN_ORDER.indexOf(cardToTransfer.column);
+      const newColumnIndex = COLUMN_ORDER.indexOf(column);
+
+      // Only allow moving to a forward column
+      if (newColumnIndex > currentColumnIndex) {
+        cardToTransfer = { ...cardToTransfer, column };
+        copy = copy.filter((c) => c.id !== cardId);
+        const moveToBack = before === "-1";
+        if (moveToBack) {
+          copy.push(cardToTransfer);
+        } else {
+          const insertAtIndex = copy.findIndex((el) => el.id === before);
+          if (insertAtIndex === undefined) return;
+          copy.splice(insertAtIndex, 0, cardToTransfer);
+        }
+        setCards(copy);
       }
-      setCards(copy);
     }
   };
+
   const handleDragOver = (e) => {
     e.preventDefault();
     highlightIndicator(e);
     setActive(true);
   };
+
   const clearHighlights = (els) => {
     const indicators = els || getIndicators();
     indicators.forEach((i) => {
       i.style.opacity = "0";
     });
   };
+
   const highlightIndicator = (e) => {
     const indicators = getIndicators();
     clearHighlights(indicators);
     const el = getNearestIndicator(e, indicators);
     el.element.style.opacity = "1";
   };
+
   const getNearestIndicator = (e, indicators) => {
     const DISTANCE_OFFSET = 50;
     const el = indicators.reduce(
@@ -135,25 +174,26 @@ const Column = ({
     );
     return el;
   };
+
   const getIndicators = () => {
     return Array.from(document.querySelectorAll(`[data-column="${column}"]`));
   };
+
   const handleDragLeave = () => {
     clearHighlights();
     setActive(false);
   };
+
   const filteredCards = cards.filter((c) => c.column === column);
+
   return (
     <div className="w-56 shrink-0">
-      {" "}
       <div className="mb-3 flex items-center justify-between">
-        {" "}
-        <h3 className={`font-medium ${headingColor}`}>{title}</h3>{" "}
+        <h3 className={`font-medium ${headingColor}`}>{title}</h3>
         <span className="rounded text-sm text-neutral-400">
-          {" "}
-          {filteredCards.length}{" "}
-        </span>{" "}
-      </div>{" "}
+          {filteredCards.length}
+        </span>
+      </div>
       <div
         onDrop={handleDragEnd}
         onDragOver={handleDragOver}
@@ -166,34 +206,43 @@ const Column = ({
             : "bg-transparent"
         }`}
       >
-        {" "}
-        {filteredCards.map((c) => {
-          return <Card key={c.id} {...c} handleDragStart={handleDragStart} />;
-        })}{" "}
-        <DropIndicator beforeId={null} column={column} />{" "}
-        <AddCard column={column} setCards={setCards} />{" "}
-      </div>{" "}
+        {filteredCards.map((c) => (
+          <Card
+            key={c.id}
+            {...c}
+            handleDragStart={handleDragStart}
+            userRole={userRole}
+          />
+        ))}
+        <DropIndicator beforeId={null} column={column} />
+        <AddCard column={column} setCards={setCards} />
+      </div>
     </div>
   );
 };
-const Card = ({ title, id, column, handleDragStart }) => {
+
+const Card = ({ title, id, column, handleDragStart, userRole }) => {
+  const isDraggable = userRole !== "operator" && userRole !== "technician";
   return (
     <>
-      {" "}
-      <DropIndicator beforeId={id} column={column} />{" "}
+      <DropIndicator beforeId={id} column={column} />
       <motion.div
         layout
         layoutId={id}
-        draggable="true"
-        onDragStart={(e) => handleDragStart(e, { title, id, column })}
+        draggable={isDraggable}
+        onDragStart={(e) =>
+          isDraggable
+            ? handleDragStart(e, { title, id, column })
+            : e.preventDefault()
+        }
         className="cursor-grab rounded border border-neutral-700 bg-neutral-800 p-3 active:cursor-grabbing"
       >
-        {" "}
-        <p className="text-sm text-neutral-100">{title}</p>{" "}
-      </motion.div>{" "}
+        <p className="text-sm text-neutral-100">{title}</p>
+      </motion.div>
     </>
   );
 };
+
 const DropIndicator = ({ beforeId, column }) => {
   return (
     <div
@@ -203,20 +252,25 @@ const DropIndicator = ({ beforeId, column }) => {
     />
   );
 };
+
 const BurnBarrel = ({ setCards, isDarkMode }) => {
   const [active, setActive] = useState(false);
+
   const handleDragOver = (e) => {
     e.preventDefault();
     setActive(true);
   };
+
   const handleDragLeave = () => {
     setActive(false);
   };
+
   const handleDragEnd = (e) => {
     const cardId = e.dataTransfer.getData("cardId");
     setCards((pv) => pv.filter((c) => c.id !== cardId));
     setActive(false);
   };
+
   return (
     <div
       onDrop={handleDragEnd}
@@ -230,8 +284,7 @@ const BurnBarrel = ({ setCards, isDarkMode }) => {
           : "border-gray-500 bg-gray-500/20 text-gray-500"
       }`}
     >
-      {" "}
-      {active ? <FaFire className="animate-bounce" /> : <FiTrash />}{" "}
+      {active ? <FaFire className="animate-bounce" /> : <FiTrash />}
     </div>
   );
 };
@@ -242,18 +295,15 @@ const AddCard = ({ column, setCards }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (!text.trim().length) return;
-
     const newCard = {
       column,
       title: text.trim(),
       id: Math.random().toString(),
     };
-
     setCards((pv) => [...pv, newCard]);
-
     setAdding(false);
+    setText(""); // Reset the input after submission
   };
 
   return (
@@ -263,13 +313,17 @@ const AddCard = ({ column, setCards }) => {
           <textarea
             onChange={(e) => setText(e.target.value)}
             autoFocus
+            value={text}
             placeholder="Add new task..."
-            className="w-full rounded border border-violet-400 bg-violet-400/20 p-3 text-sm text-neutral-50 placeholder-violet-300 focus:outline-0"
+            className="w-full rounded border border-violet-400 bg-violet-400/20 p-3 text-sm text-neutral-500 placeholder-violet-300 focus:outline-0"
           />
           <div className="mt-1.5 flex items-center justify-end gap-1.5">
             <button
-              onClick={() => setAdding(false)}
-              className="px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50"
+              onClick={() => {
+                setAdding(false);
+                setText(""); // Reset text on close
+              }}
+              className="px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50 rounded-sm"
             >
               Close
             </button>
@@ -286,7 +340,7 @@ const AddCard = ({ column, setCards }) => {
         <motion.button
           layout
           onClick={() => setAdding(true)}
-          className="flex w-full items-center gap-1.5 px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50"
+          className="flex w-full items-center gap-1.5 px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-500"
         >
           <span>Add card</span>
           <FiPlus />

@@ -1,10 +1,10 @@
 import React from "react";
 import ReactApexChart from "react-apexcharts";
-import { ChartsHeader } from "../../components/";
+import { ChartsHeader } from "..";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { pieChartData } from "../../data/dummy"; // Importing the data
 
-function Pie() {
+function PieChart() {
   const { currentMode } = useStateContext();
 
   return (
@@ -29,4 +29,4 @@ function Pie() {
   );
 }
 
-export default Pie;
+export default PieChart;
