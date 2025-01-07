@@ -535,6 +535,7 @@ export const links = [
         name: "forms",
         icon: <RiContactsLine />,
       },
+
       {
         name: "operatorSubmit",
         icon: <FaWpforms />,
@@ -555,6 +556,10 @@ export const links = [
       {
         name: "kanban",
         icon: <BsKanban />,
+      },
+      {
+        name: "masterform",
+        icon: <RiContactsLine />,
       },
     ],
   },
@@ -1545,6 +1550,7 @@ export const contextMenuItems = [
   "LastPage",
   "NextPage",
 ];
+
 
 export const ecomPieChartData = [
   { x: "مهر", y: 24, text: "35%" },

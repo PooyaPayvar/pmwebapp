@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Forms({ role = "operator" }) {
+function Forms({ role }) {
   const [rows, setRows] = useState([
     {
       id: 1,
@@ -82,12 +82,9 @@ function Forms({ role = "operator" }) {
       isEditing: false,
       isSelected: false,
     },
-    // Add more rows as needed
   ]);
-
   const [show, setShow] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
-
   const [currentRow, setCurrentRow] = useState(null); // eslint-disable-line no-unused-vars
 
   function generateFormCode(section, formDate, rowIndex) {
@@ -107,19 +104,19 @@ function Forms({ role = "operator" }) {
         return "03";
       case "refiner":
         return "04";
-      case "Before Press":
+      case "before press":
         return "06";
-      case "Press":
+      case "press":
         return "07";
-      case "After Press":
+      case "after press":
         return "08";
-      case "Sanding":
+      case "sanding":
         return "09";
-      case "Cooling System":
+      case "cooling system":
         return "10";
-      case "Steam Boiler":
+      case "steam boiler":
         return "11";
-      case "General":
+      case "general":
         return "15";
       default:
         return "00";
@@ -133,6 +130,7 @@ function Forms({ role = "operator" }) {
   }
 
   const handleClose = () => setShow(false);
+
   const handleShow = (row) => {
     setCurrentRow(row);
     setShow(true);
@@ -176,20 +174,20 @@ function Forms({ role = "operator" }) {
     setRows(rows.filter((row) => !row.isSelected));
   };
 
+  const isActionColumnVisible = role !== "operator" && role !== "technician";
+
   return (
     <div className="p-4">
       <button
         className={`bg-red-500 text-white px-4 py-2 rounded mb-4 ${
-          role === "operator" || role === "technician"
-            ? "cursor-not-allowed opacity-0"
-            : ""
+          role === "operator" || role === "technician" ? "opacity-0" : ""
         }`}
         onClick={handleDelete}
         disabled={role === "operator" || role === "technician"}
       >
         Delete
       </button>
-      <table className="min-w-full bg-white border border-gray-200 z-0">
+      <table className="min-w-full bg-white border border-gray-200 z-0 rounded-md">
         <thead>
           <tr>
             <th className="py-2 px-4 border-b">Select</th>
@@ -206,7 +204,9 @@ function Forms({ role = "operator" }) {
             <th className="py-2 px-4 border-b">Stop Date</th>
             <th className="py-2 px-4 border-b">Start Date</th>
             <th className="py-2 px-4 border-b">Problem Description</th>
-            <th className="py-2 px-4 border-b">Actions</th>
+            {isActionColumnVisible && (
+              <th className="py-2 px-4 border-b">Actions</th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -256,24 +256,20 @@ function Forms({ role = "operator" }) {
                   )}
                 </td>
               ))}
-              <td className="py-2 px-4 border-b">
-                <button
-                  className={`bg-blue-500 text-white px-4 py-2 rounded mr-2 ${
-                    role === "operator" || role === "technician"
-                      ? "cursor-not-allowed opacity-50"
-                      : ""
-                  }`}
-                  onClick={() => handleShow(row)}
-                  disabled={role === "operator" || role === "technician"}
-                >
-                  Send
-                </button>
-              </td>
+              {isActionColumnVisible && (
+                <td className="py-2 px-4 border-b">
+                  <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                    onClick={() => handleShow(row)}
+                  >
+                    Send
+                  </button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
       </table>
-
       {show && (
         <>
           <div className="fixed inset-0 bg-black bg-opacity-50 z-10"></div>
