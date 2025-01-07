@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Forms({ role = "operator" }) {
+function Forms({ role }) {
   const [rows, setRows] = useState([
     {
       id: 1,
@@ -187,89 +187,93 @@ function Forms({ role = "operator" }) {
       >
         Delete
       </button>
-      <table className="min-w-full bg-white border border-gray-200 z-0 rounded-md">
-        <thead>
-          <tr>
-            <th className="py-2 px-4 border-b">Select</th>
-            <th className="py-2 px-4 border-b">#</th>
-            <th className="py-2 px-4 border-b">Form Code</th>
-            <th className="py-2 px-4 border-b">Section</th>
-            <th className="py-2 px-4 border-b">Machine Name</th>
-            <th className="py-2 px-4 border-b">Equipment Name</th>
-            <th className="py-2 px-4 border-b">Shift</th>
-            <th className="py-2 px-4 border-b">Operator Name</th>
-            <th className="py-2 px-4 border-b">Form Date</th>
-            <th className="py-2 px-4 border-b">Problem Type</th>
-            <th className="py-2 px-4 border-b">Stop Status</th>
-            <th className="py-2 px-4 border-b">Stop Date</th>
-            <th className="py-2 px-4 border-b">Start Date</th>
-            <th className="py-2 px-4 border-b">Problem Description</th>
-            {isActionColumnVisible && (
-              <th className="py-2 px-4 border-b">Actions</th>
-            )}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row, index) => (
-            <tr key={row.id}>
-              <td className="py-2 px-4 border-b">
-                <input
-                  type="checkbox"
-                  checked={row.isSelected}
-                  onChange={() => handleSelect(row.id)}
-                />
-              </td>
-              <td className="py-2 px-4 border-b">{row.id}</td>
-              <td className="py-2 px-4 border-b">
-                {generateFormCode(row.section, row.formDate, index)}
-              </td>
-              {[
-                "section",
-                "machineName",
-                "equipmentName",
-                "shift",
-                "operatorName",
-                "formDate",
-                "problemType",
-                "stopStatus",
-                "stopDate",
-                "startDate",
-                "problemDescription",
-              ].map((field) => (
-                <td
-                  key={field}
-                  className="py-2 px-4 border-b"
-                  onDoubleClick={() => handleDoubleClick(row.id, field)}
-                >
-                  {row.isEditing === field ? (
-                    <input
-                      type="text"
-                      value={row[field]}
-                      onChange={(e) =>
-                        handleChange(row.id, field, e.target.value)
-                      }
-                      onBlur={(e) => handleSave(row.id, field, e.target.value)}
-                      autoFocus
-                    />
-                  ) : (
-                    row[field]
-                  )}
-                </td>
-              ))}
+      <div className="overflow-x-auto mx-auto">
+        <table className="min-w-fit bg-white border border-gray-200 rounded-s-md z-0">
+          <thead>
+            <tr>
+              <th className="py-2 px-4 border-b">Select</th>
+              <th className="py-2 px-4 border-b">#</th>
+              <th className="py-2 px-4 border-b">Form Code</th>
+              <th className="py-2 px-4 border-b">Section</th>
+              <th className="py-2 px-4 border-b">Machine Name</th>
+              <th className="py-2 px-4 border-b">Equipment Name</th>
+              <th className="py-2 px-4 border-b">Shift</th>
+              <th className="py-2 px-4 border-b">Operator Name</th>
+              <th className="py-2 px-4 border-b">Form Date</th>
+              <th className="py-2 px-4 border-b">Problem Type</th>
+              <th className="py-2 px-4 border-b">Stop Status</th>
+              <th className="py-2 px-4 border-b">Stop Date</th>
+              <th className="py-2 px-4 border-b">Start Date</th>
+              <th className="py-2 px-4 border-b">Problem Description</th>
               {isActionColumnVisible && (
-                <td className="py-2 px-4 border-b">
-                  <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                    onClick={() => handleShow(row)}
-                  >
-                    Send
-                  </button>
-                </td>
+                <th className="py-2 px-4 border-b">Actions</th>
               )}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rows.map((row, index) => (
+              <tr key={row.id}>
+                <td className="py-2 px-4 border-b">
+                  <input
+                    type="checkbox"
+                    checked={row.isSelected}
+                    onChange={() => handleSelect(row.id)}
+                  />
+                </td>
+                <td className="py-2 px-4 border-b">{row.id}</td>
+                <td className="py-2 px-4 border-b">
+                  {generateFormCode(row.section, row.formDate, index)}
+                </td>
+                {[
+                  "section",
+                  "machineName",
+                  "equipmentName",
+                  "shift",
+                  "operatorName",
+                  "formDate",
+                  "problemType",
+                  "stopStatus",
+                  "stopDate",
+                  "startDate",
+                  "problemDescription",
+                ].map((field) => (
+                  <td
+                    key={field}
+                    className="py-2 px-4 border-b"
+                    onDoubleClick={() => handleDoubleClick(row.id, field)}
+                  >
+                    {row.isEditing === field ? (
+                      <input
+                        type="text"
+                        value={row[field]}
+                        onChange={(e) =>
+                          handleChange(row.id, field, e.target.value)
+                        }
+                        onBlur={(e) =>
+                          handleSave(row.id, field, e.target.value)
+                        }
+                        autoFocus
+                      />
+                    ) : (
+                      row[field]
+                    )}
+                  </td>
+                ))}
+                {isActionColumnVisible && (
+                  <td className="py-2 px-4 border-b">
+                    <button
+                      className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                      onClick={() => handleShow(row)}
+                    >
+                      Send
+                    </button>
+                  </td>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {show && (
         <>
           <div className="fixed inset-0 bg-black bg-opacity-50 z-10"></div>

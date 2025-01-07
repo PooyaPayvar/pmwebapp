@@ -11,8 +11,8 @@ const LineChart = () => {
   const { currentMode } = useStateContext();
 
   return (
-    <div className="m-4 md:m-10 mt-24 p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl">
-      <div id="chart" className="w-full">
+    <div className="m-4 md:m-10 mt-24 p-10 dark:text-white rounded-3xl">
+      <div id="chart" className="w-full ">
         <ReactApexChart
           options={{
             chart: {

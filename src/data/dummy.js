@@ -1551,7 +1551,6 @@ export const contextMenuItems = [
   "NextPage",
 ];
 
-
 export const ecomPieChartData = [
   { x: "مهر", y: 24, text: "35%" },
   { x: "آبان", y: 24, text: "15%" },

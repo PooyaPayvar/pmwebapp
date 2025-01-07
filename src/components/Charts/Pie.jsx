@@ -8,11 +8,14 @@ function PieChart() {
   const { currentMode } = useStateContext();
 
   return (
-    <div className="m-4 md:m-10 mt-24 p-10 rounded-3xl">
+    <div className="m-4 md:m-10  mt-24 p-10 rounded-3xl">
       <ChartsHeader category="Pie" title="Forms Numbers in Month" />
       <div id="chart" className="w-full">
         <ReactApexChart
           options={{
+            legend: {
+              display: false,
+            },
             chart: {
               id: "basic-pie",
             },
@@ -24,7 +27,7 @@ function PieChart() {
           height={350}
         />
       </div>
-      <div id="html-dist" className="w-full"></div>
+      <div id="html-dist" className="w-full text-white"></div>
     </div>
   );
 }
