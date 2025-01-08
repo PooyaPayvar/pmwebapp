@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { MdOutlineNavigateNext } from "react-icons/md";
 import "./submitstyle.css";
 
 function OperatorSubmit() {

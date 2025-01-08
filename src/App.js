@@ -13,7 +13,6 @@ import { Navbar, Sidebar, ThemeSettings } from "./components";
 import { Pie } from "./components";
 import {
   Dashboard,
-  Calendar,
   Forms,
   OperatorSubmit,
   Kanban,
@@ -154,7 +153,6 @@ const AppContent = ({
                 <Route path="/submitform" element={<SubmitForm />} />
                 <Route path="/kanban" element={<Kanban />} />
                 <Route path="/projects" element={<Projects />} />
-                <Route path="/calendar" element={<Calendar />} />
                 <Route path="/line" element={<Line />} />
                 <Route path="/area" element={<Area />} />
                 <Route path="/bar" element={<Bar />} />
