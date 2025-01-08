@@ -1,7 +1,6 @@
 import React from "react";
 import { LineChart, Pie } from "../components";
 import { earningData } from "../data/dummy";
-import { useStateContext } from "../contexts/ContextProvider";
 
 function Dashboard() {
   return (
