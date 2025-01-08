@@ -274,8 +274,7 @@ function OperatorSubmit() {
                 </div>
               </div>
               <button type="submit" className="nextBtn">
-                Next
-                <MdOutlineNavigateNext className="next-icon" />
+                ثبت
               </button>
             </div>
           </div>
