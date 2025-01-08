@@ -8,8 +8,7 @@ const COLUMN_ORDER = ["backlog", "todo", "doing", "done"];
 
 const Kanban = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  // Mock user role for demonstration, you should get this from your auth system
-  const [userRole, setUserRole] = useState("user"); // Possible values: "user", "operator", "technician"
+  const userRole = "user"; // Possible values: "user", "operator", "technician"
   useEffect(() => {
     const matchMedia = window.matchMedia("(prefers-color-scheme: dark)");
     setIsDarkMode(matchMedia.matches);
@@ -227,7 +226,7 @@ const Card = ({ title, id, column, handleDragStart, userRole }) => {
   const isDraggable = userRole !== "operator" && userRole !== "technician";
   const navigate = useNavigate();
   const handleDoubleClick = () => {
-    navigate('/projects'); // Navigate to the details page for the card
+    navigate("/projects"); // Navigate to the details page for the card
   };
   return (
     <>
