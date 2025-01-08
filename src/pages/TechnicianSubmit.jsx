@@ -42,21 +42,11 @@ function TechnicianSubmit() {
         <form onSubmit={handleSubmit}>
           <div className="form first">
             <div className="details personal">
-              <span className="title">First Page</span>
               <div className="fields">
                 <div className="input-field">
-                  <label htmlFor="formcode">Form Code</label>
-                  <input
-                    type="text"
-                    id="formcode"
-                    placeholder="Enter Form Code"
-                    onChange={(e) =>
-                      setValues({ ...values, formcode: e.target.value })
-                    }
-                  />
-                </div>
-                <div className="input-field">
-                  <label htmlFor="section">Section</label>
+                  <label htmlFor="section">
+                    آیا برای انجام تعمیر دستورالعمل تهیه شده است ؟
+                  </label>
                   <select
                     name="section"
                     id="section"
@@ -64,17 +54,8 @@ function TechnicianSubmit() {
                       setValues({ ...values, section: e.target.value })
                     }
                   >
-                    <option value="chipper">Chipper</option>
-                    <option value="conveyorline">Conveyor Line</option>
-                    <option value="dryerairgraider">Dryer Air Grader</option>
-                    <option value="refiner">Refiner</option>
-                    <option value="beforepress">Before Press</option>
-                    <option value="press">Press</option>
-                    <option value="afterpress">After Press</option>
-                    <option value="sandingrbs">Sanding</option>
-                    <option value="coolingsystem">Cooling System</option>
-                    <option value="steamboiler">Steam Boiler</option>
-                    <option value="general">General</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
                   </select>
                 </div>
                 <div className="input-field">

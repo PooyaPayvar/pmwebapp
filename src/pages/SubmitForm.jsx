@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 // import { Link } from "react-router-dom";
 import axios from "axios";
-import { MdOutlineNavigateNext } from "react-icons/md";
 import "./submitstyle.css";
 
 function SubmitForm() {
@@ -126,7 +125,6 @@ function SubmitForm() {
                     }
                   />
                 </div>
-
                 <div className="input-field">
                   <label htmlFor="problemdate">مدت زمان توقف خط تولید</label>
                   <input
@@ -275,7 +273,7 @@ function SubmitForm() {
                 </div>
               </div>
               <button type="submit" className="nextBtn">
-                  ثبت
+                ثبت
               </button>
             </div>
           </div>
