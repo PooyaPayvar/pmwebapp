@@ -47,13 +47,13 @@ const Sidebar = ({ userRole }) => {
     { name: "dashboard", icon: <FiShoppingBag /> },
     { name: "submitform", icon: <RiContactsLine /> },
     { name: "forms", icon: <FaWpforms /> },
+    { name: "projects", icon: <FiPieChart /> },
     { name: "kanban", icon: <BsKanban /> },
-    { name: "calendar", icon: <AiOutlineCalendar /> },
     { name: "line", icon: <AiOutlineStock /> },
     { name: "area", icon: <AiOutlineAreaChart /> },
     { name: "bar", icon: <AiOutlineBarChart /> },
     { name: "pie", icon: <FiPieChart /> },
-    { name: "projects", icon: <FiPieChart /> },
+
   ];
 
   const links =
