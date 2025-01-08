@@ -3,7 +3,6 @@ import { Link, NavLink } from "react-router-dom";
 import { SiShopware } from "react-icons/si";
 import { MdOutlineCancel } from "react-icons/md";
 import Tooltip from "@mui/material/Tooltip";
-
 import { useStateContext } from "../contexts/ContextProvider"; // Ensure this path is correct
 import { FiPieChart, FiShoppingBag } from "react-icons/fi";
 import { RiContactsLine } from "react-icons/ri";
@@ -12,11 +11,10 @@ import { BsKanban } from "react-icons/bs";
 import {
   AiOutlineAreaChart,
   AiOutlineBarChart,
-  AiOutlineCalendar,
   AiOutlineStock,
 } from "react-icons/ai";
 
-const Sidebar = ({ userRole }) => {
+const Sidebar = ({ userRole = "technician" }) => {
   const { currentColor, activeMenu, setActiveMenu, screenSize } =
     useStateContext();
 
@@ -53,7 +51,6 @@ const Sidebar = ({ userRole }) => {
     { name: "area", icon: <AiOutlineAreaChart /> },
     { name: "bar", icon: <AiOutlineBarChart /> },
     { name: "pie", icon: <FiPieChart /> },
-
   ];
 
   const links =
