@@ -47,10 +47,8 @@ const Sidebar = ({ userRole }) => {
     { name: "forms", icon: <FaWpforms /> },
     { name: "projects", icon: <FiPieChart /> },
     { name: "kanban", icon: <BsKanban /> },
-    { name: "line", icon: <AiOutlineStock /> },
     { name: "area", icon: <AiOutlineAreaChart /> },
     { name: "bar", icon: <AiOutlineBarChart /> },
-    { name: "pie", icon: <FiPieChart /> },
   ];
 
   const links =
