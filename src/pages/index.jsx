@@ -6,6 +6,7 @@ export { default as OperatorLogin } from "./OperatorLogin";
 export { default as TechnicianSubmit } from "./TechnicianSubmit";
 export { default as TechnicianLogin } from "./TechnicianLogin";
 export { default as Login } from "./Login";
+export { default as Projects } from "./Projects";
 export { default as Start } from "./Start";
 export { default as Forms } from "./Forms";
 export { default as Calendar } from "./Calendar";
