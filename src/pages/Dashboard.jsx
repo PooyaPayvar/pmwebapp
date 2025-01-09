@@ -1,7 +1,7 @@
 import React from "react";
 import { LineChart, Pie } from "../components";
 import { earningData } from "../data/dummy";
-
+import { Area, Bar } from "../components";
 function Dashboard() {
   return (
     <div className="mt-24">
@@ -31,7 +31,7 @@ function Dashboard() {
         </div>
       </div>
       <div className="flex flex-col lg:flex-row gap-10 m-4 justify-center">
-        <div className="dark:text-gray-200 dark:bg-secondary-dark-bg p-6 rounded-2xl w-full flex flex-col lg:flex-row justify-center items-center">
+        <div className="bg-gray-200 dark:text-gray-200 dark:bg-secondary-dark-bg p-6 rounded-2xl w-full flex flex-col lg:flex-row justify-center items-center overflow-auto">
           <div className="flex-1 flex flex-col items-center">
             <div className="flex justify-between items-center gap-2 mb-10 w-full">
               <p className="text-xl font-semibold">Forms Overview</p>
@@ -43,6 +43,16 @@ function Dashboard() {
           <div className="flex-1 flex flex-col items-center mt-10 lg:mt-0">
             <div className="w-full h-72 flex justify-center items-center">
               <Pie />
+            </div>
+          </div>
+          <div className="flex-1 flex flex-col items-center mt-10 lg:mt-0">
+            <div className="w-full h-72 flex justify-center items-center">
+              <Bar />
+            </div>
+          </div>
+          <div className="flex-1 flex flex-col items-center mt-10 lg:mt-0">
+            <div className="w-full h-72 flex justify-center items-center">
+              <Area />
             </div>
           </div>
         </div>
